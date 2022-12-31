@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Hablemos</string>
+    <string name="alumno">Estudiante</string>
+    <string name="profesor">Profesor</string>
+    <string name="email">Email</string>
+    <string name="emailObligado">Email *</string>
+    <string name="acceder">Acceder</string>
+    <string name="password">Contraseña</string>
+    <string name="passwordObligado">Contraseña *</string>
+    <string name="preguntaRegistrado">¿No estás registrado?</string>
+    <string name="preguntaCreaCuenta"><u>Crea una cuenta</u></string>
+    <string name="nombre">Nombre *</string>
+    <string name="nuevoEstudiante"><b>Nuevo estudiante</b></string>
+    <string name="apellidos">Apellidos *</string>
+    <string name="fechaNacimientoFormato">dd/MM/yyyy</string>
+    <string name="fechaNacimiento">Fecha de Nacimiento</string>
+    <string name="imagenPerfil">Imagen de su perfil:</string>
+    <string name="sobreMi">Escribe que te gustaría que los demas supieran de ti</string>
+    <string name="creaCuenta">Crear mi cuenta</string>
+    <string name="inicial">inicial</string>
+</resources>
