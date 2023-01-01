@@ -36,6 +36,21 @@ public class Estudiante
         this.foto = foto;
     }
 
+    public Estudiante(){
+
+    }
+
+    public Estudiante(int id, String nombre, String apellidos, String email, String contrasenya, String edad, String info, String foto) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.contrasenya = contrasenya;
+        this.edad = edad;
+        this.info = info;
+        this.foto = foto;
+    }
+
     public int getId() {
         return id;
     }

@@ -61,7 +61,15 @@ public class EstudianteLoginActivity extends AppCompatActivity
                 int codigo = response.code();
 
                 if(codigo == Constantes.RESPUESTA_OK_API){
-                    //TODO INICIAR NUEVA ACTIVITY MENU DE ESTUDIANTE
+                    Intent intent = new Intent(EstudianteLoginActivity.this,menuEstudianteActivity.class);
+                    Bundle bundle = new Bundle();
+
+                    String email = binding.txtEmailLoginEstActivity.getText().toString();
+
+                    bundle.putSerializable("EMAIL",email);
+                    intent.putExtras(bundle);
+
+                    startActivity(intent);
 
                 }else if (codigo == Constantes.RESPUESTA_NOT_FOUND_API){
 

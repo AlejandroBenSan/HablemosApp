@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hablemos">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hablemos"
         tools:targetApi="31">
+        <activity
+            android:name=".actividadesEstudiante.perfilEstudianteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".actividadesEstudiante.menuEstudianteActivity"
+            android:exported="false"
+            android:label="@string/title_activity_menu_estudiante"
+            android:theme="@style/Theme.Hablemos.NoActionBar" />
         <activity
             android:name=".actividadesEstudiante.CrearNuevoEstudianteActivity"
             android:exported="false" />

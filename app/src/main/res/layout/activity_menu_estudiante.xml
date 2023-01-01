@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:textAlignment="textEnd"
+    tools:context=".actividadesEstudiante.menuEstudianteActivity"
+    tools:ignore="SpeakableTextPresentCheck">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:textAlignment="viewEnd">
+
+        <TextView
+            android:id="@+id/lblNomApeMenuEstActiv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="TextView"
+            android:textAlignment="textEnd"
+            android:textColor="#040303"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/imgPerfilMenuEstActi"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            app:srcCompat="@drawable/mi_perfil" />
+
+        <ImageView
+            android:id="@+id/imgClasesMenuEstActi"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            app:srcCompat="@drawable/mis_clases" />
+
+        <ImageView
+            android:id="@+id/imgPagoMenuEstActi"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            app:srcCompat="@drawable/realizar_pago" />
+
+        <ImageView
+            android:id="@+id/imgAjustesMenuEstActi"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            app:srcCompat="@drawable/ajustes" />
+    </LinearLayout>
+</ScrollView>
