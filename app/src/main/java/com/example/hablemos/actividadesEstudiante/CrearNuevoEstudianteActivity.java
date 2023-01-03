@@ -296,7 +296,7 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
     //CONVERTIR UN BITMAP A HEXADECIMAL
     public String convertirImagenHex(Bitmap bitmap){
         ByteArrayOutputStream array = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,array);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,20,array);
         byte [] imagenByte = array.toByteArray();
         String imagenString = display(imagenByte);
 

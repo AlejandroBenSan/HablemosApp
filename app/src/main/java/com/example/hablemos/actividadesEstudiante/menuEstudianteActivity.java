@@ -37,12 +37,17 @@ public class menuEstudianteActivity extends AppCompatActivity {
         apiConexiones = ApiUtilidades.getApiConexion();
 
         obtenerEstudianteApi(email);
-        Log.i("EMAIL",email);
 
         binding.imgPerfilMenuEstActi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(menuEstudianteActivity.this,perfilEstudianteActivity.class);
 
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("ESTUDIANTE",estudiante);
+
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

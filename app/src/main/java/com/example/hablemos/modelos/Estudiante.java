@@ -5,9 +5,10 @@ import android.media.Image;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Estudiante
+public class Estudiante implements Serializable
 {
     @SerializedName(value = "id")
     private int id;
