@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -12,11 +13,14 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -63,6 +67,7 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
 
         //GUARDAR UN NUEVO ESTUDIANTE
         binding.btnCrearEstActivity.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View view) {
                 if(compruebaDatos())
@@ -184,8 +189,10 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
         apiConexiones.crearEstudiante(estudiante).enqueue(new Callback<Estudiante>() {
             @Override
             public void onResponse(Call<Estudiante> call, @NonNull Response<Estudiante> response) {
+
                 if(response.errorBody() != null){
                     Gson gson = new Gson();
+
                     try {
                         ApiError error = gson.fromJson(response.errorBody().string(), ApiError.class);
 
@@ -211,7 +218,9 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(response.isSuccessful()){
+
+                }else{
+                    if(response.code() == 200){
                         AlertDialog.Builder builder = new AlertDialog.Builder(CrearNuevoEstudianteActivity.this);
 
                         builder.setTitle("¡Cuenta creada!");
@@ -220,7 +229,15 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
                         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //TODO NUEVA ACTIVIDAD A LA CUENTA DEL ESTUDIANTE
+                                Intent intent = new Intent(CrearNuevoEstudianteActivity.this,menuEstudianteActivity.class);
+                                Bundle bundle = new Bundle();
+
+                                String email = binding.txtEmailNewEstActivity.getText().toString();
+
+                                bundle.putSerializable("EMAIL",email);
+                                intent.putExtras(bundle);
+
+                                startActivity(intent);
                             }
                         });
 
@@ -294,9 +311,14 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
     }
 
     //CONVERTIR UN BITMAP A HEXADECIMAL
-    public String convertirImagenHex(Bitmap bitmap){
+    public String convertirImagenHex(Bitmap bitmap) {
+        int anchoNuevo = bitmap.getWidth() / 8;
+        int altoNuevo = bitmap.getHeight() / 8;
+
+        Bitmap bitmapReducido = Bitmap.createScaledBitmap(bitmap,anchoNuevo,altoNuevo,false);
         ByteArrayOutputStream array = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,20,array);
+        //SI DA PROBLEMAS AL LEER LA ACTIVIDAD DEBEREMOS BAJAR LA CALIDAD DE LA IMAGEN
+        bitmapReducido.compress(Bitmap.CompressFormat.JPEG,100,array);
         byte [] imagenByte = array.toByteArray();
         String imagenString = display(imagenByte);
 

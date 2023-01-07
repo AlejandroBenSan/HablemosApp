@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_margin="5dp"
+            android:clickable="true"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -27,8 +28,9 @@
             android:layout_margin="5dp"
             android:text="@string/nombre"
             android:textColor="#020202"
-            android:textColorHint="#050505"
-            android:textSize="16sp" />
+            android:textColorHint="#1028C1"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtNombrePerfilEstActi"
@@ -46,7 +48,8 @@
             android:text="@string/apellidos"
             android:textColor="#020202"
             android:textColorHint="#050505"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtApellidoPerfilEstActi"
@@ -64,7 +67,8 @@
             android:text="@string/emailObligado"
             android:textColor="#020202"
             android:textColorHint="#050505"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtEmailPerfilEstAct"
@@ -72,7 +76,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:enabled="false"/>
 
         <TextView
             android:id="@+id/textView9"
@@ -82,7 +87,8 @@
             android:text="@string/passwordObligado"
             android:textColor="#020202"
             android:textColorHint="#050505"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtPasswordPerfilEstActi"
@@ -90,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName|textPassword" />
 
         <TextView
             android:id="@+id/textView10"
@@ -100,7 +106,8 @@
             android:text="@string/fechaNacimiento"
             android:textColor="#020202"
             android:textColorHint="#050505"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtEdadPerfilEstActi"
@@ -120,7 +127,8 @@
             android:text="@string/sobreMi2"
             android:textColor="#020202"
             android:textColorHint="#050505"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtInfoPerfilEstActi"
