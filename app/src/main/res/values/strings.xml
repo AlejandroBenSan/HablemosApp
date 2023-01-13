@@ -11,6 +11,7 @@
     <string name="preguntaCreaCuenta"><u>Crea una cuenta</u></string>
     <string name="nombre">Nombre *</string>
     <string name="nuevoEstudiante"><b>Nuevo estudiante</b></string>
+    <string name="nuevoProfesor"><b>Nuevo profesor</b></string>
     <string name="apellidos">Apellidos *</string>
     <string name="fechaNacimientoFormato">dd/MM/yyyy</string>
     <string name="fechaNacimiento">Fecha de Nacimiento</string>

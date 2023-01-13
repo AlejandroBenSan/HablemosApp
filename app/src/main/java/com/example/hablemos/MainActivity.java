@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.hablemos.actividadesEstudiante.EstudianteLoginActivity;
+import com.example.hablemos.actividadesProfesor.ProfesorLoginActivity;
 import com.example.hablemos.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
         binding.imgProfesor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ProfesorLoginActivity.class);
 
+                startActivity(intent);
             }
         });
     }

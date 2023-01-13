@@ -1,4 +1,4 @@
-package com.example.hablemos.actividadesEstudiante;
+package com.example.hablemos.actividadesProfesor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,65 +6,63 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import com.example.hablemos.actividadesEstudiante.EstudianteLoginActivity;
+import com.example.hablemos.actividadesEstudiante.menuEstudianteActivity;
 import com.example.hablemos.conexiones.ApiConexiones;
 import com.example.hablemos.conexiones.ApiUtilidades;
-import com.example.hablemos.databinding.ActivityEstudianteLoginBinding;
+import com.example.hablemos.databinding.ActivityProfesorLoginBinding;
 import com.example.hablemos.modelosApoyo.Constantes;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EstudianteLoginActivity extends AppCompatActivity
-{
-    private ActivityEstudianteLoginBinding binding;
+public class ProfesorLoginActivity extends AppCompatActivity {
+    private ActivityProfesorLoginBinding binding;
     private ApiConexiones apiConexiones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityEstudianteLoginBinding.inflate(getLayoutInflater());
+        binding = ActivityProfesorLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         apiConexiones = ApiUtilidades.getApiConexion();
-        //Acceder con email y contraseña
-        binding.btnAccederLoginEstActivity.setOnClickListener(new View.OnClickListener() {
+
+        binding.txtCreaCuentaLoginProfActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = binding.txtEmailLoginEstActivity.getText().toString();
-                String contrasenya = binding.txtLoginPasswordEstActivity.getText().toString();
-                verificarEmailPass(email,contrasenya);
+                Intent intent = new Intent(ProfesorLoginActivity.this, CrearNuevoProfesorActivity.class);
+
+                startActivity(intent);
+                finish();
             }
         });
 
-        //Crear una cuenta
-        binding.txtCreaCuentaLoginEstActivity.setOnClickListener(new View.OnClickListener() {
+        binding.btnAccederLoginProfActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EstudianteLoginActivity.this, CrearNuevoEstudianteActivity.class);
-
-                startActivity(intent);
+                String email = binding.txtEmailLoginProfActivity.getText().toString();
+                String contrasenya = binding.txtLoginPasswordProfActivity.getText().toString();
+                verificarEmailPass(email,contrasenya);
             }
         });
     }
 
-    public void verificarEmailPass(String email, String contrasenya){
-
-        apiConexiones.comprobarLogin(email,contrasenya).enqueue(new Callback<String>() {
+    public void verificarEmailPass(String email,String contrasenya){
+        apiConexiones.comprobarLoginProfesor(email,contrasenya).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 int codigo = response.code();
 
                 if(codigo == Constantes.RESPUESTA_OK_API){
-                    Intent intent = new Intent(EstudianteLoginActivity.this,menuEstudianteActivity.class);
+                    Intent intent = new Intent(ProfesorLoginActivity.this, MenuProfesorActivity.class);
                     Bundle bundle = new Bundle();
 
-                    String email = binding.txtEmailLoginEstActivity.getText().toString();
+                    String email = binding.txtEmailLoginProfActivity.getText().toString();
 
                     bundle.putSerializable("EMAIL",email);
                     intent.putExtras(bundle);
@@ -74,7 +72,7 @@ public class EstudianteLoginActivity extends AppCompatActivity
 
                 }else if (codigo == Constantes.RESPUESTA_NOT_FOUND_API){
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EstudianteLoginActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfesorLoginActivity.this);
 
                     builder.setTitle("Acceso");
                     builder.setMessage("Email o contraseña erroneos");
@@ -82,16 +80,15 @@ public class EstudianteLoginActivity extends AppCompatActivity
                     builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            binding.txtEmailLoginEstActivity.setText("");
-                            binding.txtLoginPasswordEstActivity.setText("");
+                            binding.txtEmailLoginProfActivity.setText("");
+                            binding.txtLoginPasswordProfActivity.setText("");
                         }
                     });
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                }
-                else if(codigo == Constantes.RESPUESTA_ERROR_TRY_API){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EstudianteLoginActivity.this);
+                }else if(codigo == Constantes.RESPUESTA_ERROR_TRY_API){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfesorLoginActivity.this);
 
                     builder.setTitle("Error");
                     builder.setMessage("Problema internos con la API. Comuniquese con el desarrollador");
@@ -106,13 +103,11 @@ public class EstudianteLoginActivity extends AppCompatActivity
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t)
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EstudianteLoginActivity.this);
+            public void onFailure(Call<String> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfesorLoginActivity.this);
 
                 builder.setTitle("Error");
                 builder.setMessage("Problema con la conexión. Comuniquese con el desarrollador");

@@ -1,11 +1,9 @@
-package com.example.hablemos.actividadesEstudiante;
+package com.example.hablemos.actividadesProfesor;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -13,14 +11,11 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -30,15 +25,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.hablemos.R;
+import com.example.hablemos.actividadesEstudiante.CrearNuevoEstudianteActivity;
+import com.example.hablemos.actividadesEstudiante.menuEstudianteActivity;
 import com.example.hablemos.conexiones.ApiConexiones;
 import com.example.hablemos.conexiones.ApiUtilidades;
 import com.example.hablemos.databinding.ActivityCrearNuevoEstudianteBinding;
-import com.example.hablemos.modelos.Estudiante;
+import com.example.hablemos.databinding.ActivityCrearNuevoProfesorBinding;
+import com.example.hablemos.modelos.Profesor;
 import com.example.hablemos.modelosApoyo.ApiError;
 import com.example.hablemos.modelosApoyo.DatePickerFragment;
-import com.example.hablemos.modelosApoyo.Error;
 import com.google.gson.Gson;
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,47 +43,60 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrearNuevoEstudianteActivity extends AppCompatActivity {
+public class CrearNuevoProfesorActivity extends AppCompatActivity {
 
+    private ActivityCrearNuevoProfesorBinding binding;
     private ActivityResultLauncher<Intent> launcher;
-    private ActivityCrearNuevoEstudianteBinding binding;
     private String fechaEdad;
     private ApiConexiones apiConexiones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityCrearNuevoEstudianteBinding.inflate(getLayoutInflater());
+        binding = ActivityCrearNuevoProfesorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         inicializarLauncher();
-        //Conexion a la API
+
         apiConexiones = ApiUtilidades.getApiConexion();
 
-        //GUARDAR UN NUEVO ESTUDIANTE
-        binding.btnCrearEstActivity.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.Q)
+        binding.imgFotoNewProfActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(compruebaDatos())
-                {
-                    String nombre = binding.txtNombreNewEstActivity.getText().toString();
-                    String apellidos = binding.txtApellidosNewEstActivity.getText().toString();
-                    String email = binding.txtEmailNewEstActivity.getText().toString();
-                    String password = binding.txtPasswordNewEstActivity.getText().toString();
+                Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                intent.setType("image/*"); // a que tipo de datos queremos aplicar la acción
+                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // queremos un task nuevo
+
+                launcher.launch(intent);
+            }
+        });
+
+        binding.txtDateNewProfActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog();
+            }
+        });
+
+        binding.btnCrearProfActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(compruebaDatos()){
+                    String nombre = binding.txtNombreNewProfActivity.getText().toString();
+                    String apellidos = binding.txtApellidosNewProfActivity.getText().toString();
+                    String email = binding.txtEmailNewProfActivity.getText().toString();
+                    String password = binding.txtPasswordNewProfActivity.getText().toString();
                     String edad;
 
-                    if(binding.txtDateNewEstActivity.getText().equals("")){
+                    if(binding.txtDateNewProfActivity.getText().equals("")){
                         edad = null;
                     }
                     else{
                         edad = fechaEdad;
                     }
 
-                    //Si es igual a la foto por defecto
-                    ImageView v = binding.imgFotoNewEstActivity;
-
+                    ImageView v = binding.imgFotoNewProfActivity;
                     Drawable fotoActualPerfil = v.getDrawable().getCurrent();
                     @SuppressLint("UseCompatLoadingForDrawables") Drawable fotoPorDefecto = getDrawable(R.drawable.plus_svgrepo_com);
 
@@ -102,102 +111,36 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
                     }
 
                     String info;
-                    if(binding.txtInfoNewEstActivity.getText().toString().equals("")){
+
+                    if(binding.txtInfoNewProfActivity.getText().toString().equals("")){
                         info = null;
                     }else{
-                        info = binding.txtInfoNewEstActivity.getText().toString();
+                        info = binding.txtInfoNewProfActivity.getText().toString();
                     }
 
-                    Estudiante estudiante = new Estudiante(nombre,apellidos,email,password,edad,info,fotoHex);
+                    Profesor profesor = new Profesor(nombre,apellidos,email,password,edad,info,fotoHex);
+                    Log.i("PROFESOR",profesor.toString());
+                    enviarProfesorApi(profesor);
 
-                    enviarEstudianteApi(estudiante);
+                }else{
+                    Toast.makeText(CrearNuevoProfesorActivity.this, "Faltan datos por rellenar", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    Toast.makeText(CrearNuevoEstudianteActivity.this, "Faltan datos por rellenar", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        //MOSTRAMOS EL CALENDAR PARA LA EDAD
-        binding.txtDateNewEstActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog();
-            }
-        });
-
-
-        //PARA CAMBIAR LA FOTO DE PERFIL
-        binding.imgFotoNewEstActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                intent.setType("image/*"); // a que tipo de datos queremos aplicar la acción
-                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // queremos un task nuevo
-
-                launcher.launch(intent);
             }
         });
     }
 
-    //LAUNCHER PARA RECOGER LA IMAGEN SELECCIONADA
-    public void inicializarLauncher(){
-        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result)
-                    {
-                        if(result.getResultCode() == RESULT_OK && result.getData() != null){
-                            Uri selectedImage = result.getData().getData();
-                            try {
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),selectedImage);
-
-                                binding.imgFotoNewEstActivity.setImageBitmap(bitmap);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-    }
-
-    //COMPROBAMOS QUE LOS DATOS OBLIGATORIOS ESTEN RELLENOS
-    public boolean compruebaDatos()
-    {
-        boolean correcto = true;
-        if(binding.txtNombreNewEstActivity.getText().toString().equals("")){
-            correcto = false;
-
-        }if(binding.txtApellidosNewEstActivity.getText().toString().equals(""))
-        {
-            correcto = false;
-        }
-        if(binding.txtEmailNewEstActivity.getText().toString().equals("")){
-            correcto = false;
-        }
-        if(binding.txtPasswordNewEstActivity.getText().toString().equals("")){
-            correcto = false;
-        }
-
-        return correcto;
-    }
-
-    //FUNCION PARA ENVIAR LOS DATOS A LA API
-    public void enviarEstudianteApi(Estudiante estudiante){
-
-        apiConexiones.crearEstudiante(estudiante).enqueue(new Callback<Estudiante>() {
+    public void enviarProfesorApi(Profesor profesor){
+        apiConexiones.crearProfesor(profesor).enqueue(new Callback<Profesor>() {
             @Override
-            public void onResponse(Call<Estudiante> call, @NonNull Response<Estudiante> response) {
-
+            public void onResponse(Call<Profesor> call, Response<Profesor> response) {
                 if(response.errorBody() != null){
                     Gson gson = new Gson();
 
-                    try {
+                    try{
                         ApiError error = gson.fromJson(response.errorBody().string(), ApiError.class);
 
                         if(error.getApiError() != null){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(CrearNuevoEstudianteActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(CrearNuevoProfesorActivity.this);
 
                             builder.setTitle("Error al crear una cuenta");
                             //TODO HAY QUE CAMBIAR EL MENSAJE A ESPAÑOL
@@ -207,32 +150,30 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
                             builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    binding.txtEmailNewEstActivity.setText("");
+                                    binding.txtEmailNewProfActivity.setText("");
                                 }
                             });
 
                             AlertDialog dialog = builder.create();
                             dialog.show();
                         }
-                    } catch (IOException e) {
+                    }catch (IOException e){
                         e.printStackTrace();
                     }
-
-
                 }else{
                     if(response.code() == 200){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(CrearNuevoEstudianteActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CrearNuevoProfesorActivity.this);
 
                         builder.setTitle("¡Cuenta creada!");
                         builder.setMessage("Bienvendo a Hablemos");
-
+                        builder.setCancelable(false);
                         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent intent = new Intent(CrearNuevoEstudianteActivity.this,menuEstudianteActivity.class);
+                                Intent intent = new Intent(CrearNuevoProfesorActivity.this, MenuProfesorActivity.class);
                                 Bundle bundle = new Bundle();
 
-                                String email = binding.txtEmailNewEstActivity.getText().toString();
+                                String email = binding.txtEmailNewProfActivity.getText().toString();
 
                                 bundle.putSerializable("EMAIL",email);
                                 intent.putExtras(bundle);
@@ -246,29 +187,57 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
 
                     }
                 }
-
             }
 
             @Override
-            public void onFailure(Call<Estudiante> call, Throwable t) {
-                Toast.makeText(CrearNuevoEstudianteActivity.this,
+            public void onFailure(Call<Profesor> call, Throwable t) {
+                Toast.makeText(CrearNuevoProfesorActivity.this,
                         "Error al guardar los datos", Toast.LENGTH_SHORT).show();
             }
-
-
         });
-        //OBJETO EN JSON PARA VISUALIZARLO
-        /*GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        String json = gson.toJson(estudiante);
-
-        Log.i("ESTUDIANTE",json);*/
     }
 
-    
+    //COMPROBAMOS QUE LOS DATOS OBLIGATORIOS ESTEN RELLENOS
+    public boolean compruebaDatos()
+    {
+        boolean correcto = true;
+        if(binding.txtNombreNewProfActivity.getText().toString().equals("")){
+            correcto = false;
 
-    //MOSTRAMOS EL CALENDAR, MOSTRAMOS LA FECHA Y LA GUARDAMOS EN FORMATO STRING
+        }if(binding.txtApellidosNewProfActivity.getText().toString().equals(""))
+    {
+        correcto = false;
+    }
+        if(binding.txtEmailNewProfActivity.getText().toString().equals("")){
+            correcto = false;
+        }
+        if(binding.txtPasswordNewProfActivity.getText().toString().equals("")){
+            correcto = false;
+        }
+
+        return correcto;
+    }
+
+    public void inicializarLauncher(){
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result)
+                    {
+                        if(result.getResultCode() == RESULT_OK && result.getData() != null){
+                            Uri selectedImage = result.getData().getData();
+                            try {
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),selectedImage);
+
+                                binding.imgFotoNewProfActivity.setImageBitmap(bitmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+    }
+
     private void showDatePickerDialog()
     {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
@@ -276,7 +245,7 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 porque enero cuenta como 0
                 final String selectedDate = day + " / " + (month+1) + " / " + year;
-                binding.txtDateNewEstActivity.setText(selectedDate);
+                binding.txtDateNewProfActivity.setText(selectedDate);
 
                 final String fecha = year+"-"+(month+1)+"-"+day;
 
@@ -334,5 +303,4 @@ public class CrearNuevoEstudianteActivity extends AppCompatActivity {
         }
         return stringBuilder.toString();
     }
-
 }

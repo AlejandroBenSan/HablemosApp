@@ -48,6 +48,7 @@ public class menuEstudianteActivity extends AppCompatActivity {
 
                 intent.putExtras(bundle);
                 startActivity(intent);
+                finish();
             }
         });
 

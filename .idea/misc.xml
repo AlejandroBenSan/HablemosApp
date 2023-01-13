@@ -9,10 +9,13 @@
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout-w1240dp/activity_estudiante_login.xml" value="0.1734375" />
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout-w936dp/activity_estudiante_login.xml" value="0.190625" />
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_crear_nuevo_estudiante.xml" value="0.25416666666666665" />
+        <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_crear_nuevo_profesor.xml" value="0.264" />
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_estudiante_login.xml" value="0.264" />
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_menu_estudiante.xml" value="0.25416666666666665" />
+        <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_menu_profesor.xml" value="0.36666666666666664" />
         <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_perfil_estudiante.xml" value="0.25416666666666665" />
+        <entry key="..\:/Proyectos Android Java/Hablemos/app/src/main/res/layout/activity_profesor_login.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
